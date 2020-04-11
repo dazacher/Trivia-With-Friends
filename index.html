@@ -1,14 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-
-<body>
-
-</body>
-
+<html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Trivia with Friends</title>
+      <link rel="stylesheet" href="./assets/styles.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+      <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <section class="hero is-fullheight">
+        <div class="hero-body">
+            <div class="container">
+                <!-- highscores & discord buttons -->
+                <nav class="navbar" role="navigation" aria-label="main navigation">
+                        <div class="navbar-item">
+                        <div class="buttons">
+                            <a class="button is-primary" id="highscores">
+                            <strong>Highscores</strong>
+                            </a>
+                            <a class="button is-light" id="discord">
+                            Discord?
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+                <div id="title">
+                    <p>
+                        Trivia with Friends
+                    </p>
+                </div>
+                <div class="content">
+                    <!-- questions  -->
+                    <div id="center-card">
+                        <div class="field">
+                            <div class="control">
+                            <div class="select is-primary">
+                                <select id="numberOfQuestions">
+                                    <option>Number of Questions</option>
+                                    <option>10</option>
+                                    <option>20</option>
+                                    <option>30</option>
+                                    <option>40</option>
+                                    <option>50</option>
+                                </select>
+                            </div>
+                            </div>
+                        </div>
+                        <!-- category  -->
+                        <div class="field">
+                            <div class="control">
+                            <div class="select is-primary">
+                                <select>
+                                <option>Select Category</option>
+                                <option>General Knowledge</option>
+                                <option>Films</option>
+                                <option>Books</option>
+                                <option>Video Games</option>
+                                <option>Music</option>
+                                <option>Television</option>
+                                <option>Celebrities</option>
+                                <option>Science & Nature</option>
+                                <option>Art</option>
+                                <option>Vehicles</option>
+                                </select>
+                            </div>
+                            </div>
+                        </div>
+                        <!-- difficulty  -->
+                        <div class="field">
+                            <div class="control">
+                            <div class="select is-primary">
+                                <select>
+                                <option>Select Difficulty</option>
+                                <option>Easy</option>
+                                <option>Medium</option>
+                                <option>Hard</option>
+                                </select>
+                            </div>
+                            </div>
+                        </div>
+                        <!-- start button -->
+                        <div id="startBtn">
+                            <button class="button is-danger is-rounded">START GAME</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </section>
+  </body>
 </html>

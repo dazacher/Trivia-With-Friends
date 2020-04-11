@@ -1,0 +1,40 @@
+body{
+    background-image: url(../assets/images/backgroundphoto.jpg);
+    background-size: cover;
+    background-attachment: fixed;
+}
+.content{
+    background: rgba(0,0,0,0.5);
+    width: 50%;
+    padding: 40px;
+    margin: 100px auto;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    height: 500px;
+}
+p{
+    font-size: 25px;
+    color: white;
+}
+#highscores{
+    background-color: hotpink;
+}
+#discord{
+    background-color: #00cc96;
+}
+#title{
+    text-align: center;
+}
+/* title of website  */
+p{
+    color: black;
+    font-family: 'Press Start 2P', cursive;
+    font-weight: bolder;
+    /* text-shadow: -1px 0 hotpink, 0 1px hotpink, 1px 0 hotpink, 0 -1px hotpink; */
+    font-size: xx-large;
+}
+/* .startBtn{
+    
+}
+.center-card{
+    
+} */
