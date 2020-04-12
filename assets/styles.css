@@ -1,7 +1,17 @@
-body{
+.create-game{
     background-image: url(../assets/images/backgroundphoto.jpg);
     background-size: cover;
     background-attachment: fixed;
+}
+.game-page{
+    animation: change 10s infinite;
+}
+@keyframes change{
+    0%{background-color: #1abc9c;}
+    25%{background-color: #2ecc71;}
+    50%{background-color: #3498db;}
+    75%{background-color: #9b59b6;}
+    100%{background-color: #e74c3c;}
 }
 .content{
     background: rgba(0,0,0,0.5);
