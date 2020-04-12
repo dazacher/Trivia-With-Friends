@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html>
-  <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Trivia with Friends</title>
-      <link rel="stylesheet" href="./assets/styles.css">
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
-      <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  </head>
-  <body>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trivia with Friends</title>
+    <link rel="stylesheet" href="./assets/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
     <section class="hero is-fullheight">
         <div class="hero-body">
             <div class="container">
                 <!-- highscores & discord buttons -->
                 <nav class="navbar" role="navigation" aria-label="main navigation">
-                        <div class="navbar-item">
+                    <div class="navbar-item">
                         <div class="buttons">
                             <a class="button is-primary" id="highscores">
-                            <strong>Highscores</strong>
+                                <strong>Highscores</strong>
                             </a>
                             <a class="button is-light" id="discord">
-                            Discord?
+                                Discord?
                             </a>
                         </div>
                     </div>
@@ -30,54 +35,54 @@
                         Trivia with Friends
                     </p>
                 </div>
-                <div class="content">
+                <div class="content" id="startgame">
                     <!-- questions  -->
                     <div id="center-card">
                         <div class="field">
                             <div class="control">
-                            <div class="select is-primary">
-                                <select id="numberOfQuestions">
-                                    <option>Number of Questions</option>
-                                    <option>10</option>
-                                    <option>20</option>
-                                    <option>30</option>
-                                    <option>40</option>
-                                    <option>50</option>
-                                </select>
-                            </div>
+                                <div class="select is-primary">
+                                    <select id="numberOfQuestions">
+                                        <option value="10">Number of Questions</option>
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="40">40</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <!-- category  -->
                         <div class="field">
                             <div class="control">
-                            <div class="select is-primary">
-                                <select>
-                                <option>Select Category</option>
-                                <option>General Knowledge</option>
-                                <option>Films</option>
-                                <option>Books</option>
-                                <option>Video Games</option>
-                                <option>Music</option>
-                                <option>Television</option>
-                                <option>Celebrities</option>
-                                <option>Science & Nature</option>
-                                <option>Art</option>
-                                <option>Vehicles</option>
-                                </select>
-                            </div>
+                                <div class="select is-primary">
+                                    <select id="category">
+                                        <option value="any">Any Category</option>
+                                        <option value="9">General Knowledge</option>
+                                        <option value="11">Entertainment: Film</option>
+                                        <option value="10">Entertainment: Books</option>
+                                        <option value="15">Entertainment: Video Games</option>
+                                        <option value="12">Entertainment: Music</option>
+                                        <option value="14">Entertainment: Television</option>
+                                        <option value="21">Sports</option>
+                                        <option value="17">Science &amp; Nature</option>
+                                        <option value="25">Art</option>
+                                        <option value="28">Vehicles</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <!-- difficulty  -->
                         <div class="field">
                             <div class="control">
-                            <div class="select is-primary">
-                                <select>
-                                <option>Select Difficulty</option>
-                                <option>Easy</option>
-                                <option>Medium</option>
-                                <option>Hard</option>
-                                </select>
-                            </div>
+                                <div class="select is-primary">
+                                    <select id="difficulty">
+                                        <option value="any">Any Difficulty</option>
+                                        <option value="easy">Easy</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="hard">Hard</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <!-- start button -->
@@ -86,8 +91,10 @@
                         </div>
                     </div>
                 </div>
+                <div id="questions" class="content"></div>
             </div>
-        </div>
-      </section>
-  </body>
+    </section>
+    <script src="assets/script.js"></script>
+</body>
+
 </html>
