@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="./assets/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- Soundmanager Javascript Library -->
+    <script src="./assets/soundmanagerv297a-20170601/script/soundmanager2.js"></script>
+    <!-- Add Moment.js file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
@@ -15,7 +19,7 @@
     <section class="hero is-fullheight">
         <div class="hero-body">
             <div class="container">
-                <!-- highscores & discord buttons -->
+                <!-- highscores & discord buttons & timer label-->
                 <nav class="navbar" role="navigation" aria-label="main navigation">
                     <div class="navbar-item">
                         <div class="buttons">
@@ -25,6 +29,8 @@
                             <a class="button is-light" id="discord">
                                 Discord?
                             </a>
+                            <p id="timer">Timer seconds</p>
+                            <p id="gameOver"></p>
                         </div>
                     </div>
                 </nav>
@@ -85,7 +91,7 @@
                         </div>
                         <!-- start button -->
                         <div id="startBtn">
-                            <a class="button is-danger is-rounded" href="game-page.html">START GAME</a>
+                            <a class="button is-danger is-rounded" >START GAME</a>
                         </div>
                     </div>
                 </div>
