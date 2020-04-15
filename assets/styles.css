@@ -68,14 +68,20 @@ p{
     background-color: clear;
     margin-left: 10%;
     margin-right: 10%;
-    margin-top: 200px;
+    margin-top: 100px;
     text-align: center;
     font-family: 'Press Start 2P', cursive;
     font-weight: bolder;
-    font-size: xx-large;
+    font-size: 40px;
     color: hotpink;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+    text-shadow: -3px 0 black, 0 3px black, 3px 0 black, 0 -3px black;
 }
+
+.new-game-btn{
+    margin-top: 15px;
+    
+}
+
 .high-score-1{
     background-color: ;
     margin-left: 30%;
@@ -85,9 +91,123 @@ p{
     font-family: 'Press Start 2P', cursive;
     font-weight: bolder;
     font-size: x-large;
-    color:hotpink;
+    color:rgb(211, 39, 39);
     text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
 }
-.new-game-btn{
-    margin-top: 15px;
+
+.high-score-2{
+    background-color: ;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 25px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-weight: bolder;
+    font-size: x-large;
+    color:rgb(61, 16, 38);
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.high-score-3{
+    background-color: ;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 25px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-weight: bolder;
+    font-size: x-large;
+    color:rgb(207, 125, 2);
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.high-score-4{
+    background-color: ;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 25px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-weight: bolder;
+    font-size: x-large;
+    color:rgb(236, 240, 8);
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.high-score-5{
+    background-color: ;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 25px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-weight: bolder;
+    font-size: x-large;
+    color:rgb(15, 114, 6);
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.high-score-6{
+    background-color: ;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 25px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-weight: bolder;
+    font-size: x-large;
+    color:rgb(216, 226, 226);
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.high-score-7{
+    background-color: ;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 25px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-weight: bolder;
+    font-size: x-large;
+    color:rgb(23, 184, 233);
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.high-score-8{
+    background-color: ;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 25px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-weight: bolder;
+    font-size: x-large;
+    color:rgb(228, 3, 3);
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.high-score-9{
+    background-color: ;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 25px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-weight: bolder;
+    font-size: x-large;
+    color:rgb(91, 82, 223);
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.high-score-10{
+    background-color: ;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 25px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-weight: bolder;
+    font-size: x-large;
+    color:greenyellow;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
 }
