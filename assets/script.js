@@ -83,40 +83,41 @@ $(document).ready(function () {
         var gameOverH5 = $("<h1>");
         gameOverH5.text("Game Over");
         gameOverDiv.append(gameOverH5);
+        var highScoreMsgH2 = $("<h2>");
+        highScoreMsgH2.text = "High score: " + timerCount;
+        gameOverDiv.appendChild(highScoreMsgH2);
         setTimeout(function () {
             $(window).attr('location', './game-page.html');
         }, 5000);
     }
+
     //Function to display question.
     function displayQuestion() {
+        // Reset timers
+        clearTimeout(timerInt);
+        clearTimeout(giphyInt);
+
         shuffleArr = [questions[currentQuestion].correct_answer, ...questions[currentQuestion].incorrect_answers].map(a => [Math.random(), a])
             .sort((a, b) => a[0] - b[0])
             .map(a => a[1])
         console.log("currentQuestion after shuffleArr set ", currentQuestion);
         console.log(shuffleArr)
         // Set up game timer and make it visible
-        var quizTimer = $("#timer");
+        // var quizTimer = $("#timer");
         $("#timer").css("visibility", "visible");
         // Show question on display
         $("#questions").append(`<h1>${questions[currentQuestion].question}</h1><br>`)
 
         $("#questions").append(`<button class="answers button is-danger is-rounded" style:text-align:center; data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[0]}</button><br>`)
 
-
         $("#questions").append(`<button class="answers button is-danger is-rounded" data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[1]}</button><br>`)
-
 
         $("#questions").append(`<button class="answers button is-danger is-rounded" data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[2]}</button><br>`)
 
-
         $("#questions").append(`<button class="answers button is-danger is-rounded" data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[3]}</button><br>`)
 
-
-        clearTimeout(timerInt);
-        clearTimeout(giphyInt);
         console.log("Message", questions, currentQuestion);
         questionTimer();
-
     };
 
     // Verify the answers clicked on as to correct or incorrect then clear the display and moveon to next question.
@@ -128,26 +129,26 @@ $(document).ready(function () {
         // grab correct answer
         var correctAnswer = questions[currentQuestion].correct_answer;
         console.log("correctAnswer ", correctAnswer);
-        // compare current text to
+        // compare current text to correct answer
         if (currentText === correctAnswer) {
             clearDisplay();
             console.log("In the correct if statement");
             soundManager.play('Obi-Wan');
             apiKey = "dwmJvUX39tGRmMpNFZhIxgzD5J6JuM7K";
             correctGiphyURL = "https://api.giphy.com/v1/gifs/search?api_key=" + apiKey + "&q=The force will be with you&limit=1&rating=G&lang=en";
-
+            // Get giphy for correct answer
             $.ajax({
                 url: correctGiphyURL,
                 method: "GET"
             }).then(function (responseCorrectData) {
                 console.log("response.Data ", responseCorrectData);
                 correctInt = setTimeout(function () {
-                var correctImageUrl = responseCorrectData.data[0].images.original.url;
-                var correctAnswerImg = $("<img>");
-                correctAnswerImg.attr("src", correctImageUrl);
-                correctAnswerImg.attr("alt", "Obi-Wan");
-                $("#questions").append(correctAnswerImg);
-            }, 100);
+                    var correctImageUrl = responseCorrectData.data[0].images.original.url;
+                    var correctAnswerImg = $("<img>");
+                    correctAnswerImg.attr("src", correctImageUrl);
+                    correctAnswerImg.attr("alt", "Obi-Wan");
+                    $("#questions").append(correctAnswerImg);
+                }, 100);
 
                 // Show giphy for 3 seconds then clear screen move to next question and display to screen
                 correctAnswerInt = setTimeout(function () {
@@ -160,7 +161,7 @@ $(document).ready(function () {
             });
 
         } else if (currentText !== correctAnswer) {
-            // } else {
+            
             // Incorrect Data Question Answers Code
             clearDisplay();
             // soundManager.unmute('DarthVader');
@@ -168,7 +169,7 @@ $(document).ready(function () {
             soundManager.play('DarthVader');
             apiKey = "dwmJvUX39tGRmMpNFZhIxgzD5J6JuM7K";
             incorrectGiphyURL = "https://api.giphy.com/v1/gifs/search?api_key=" + apiKey + "&q=Darth vader I have you know&limit=1&offset=0&rating=G&lang=en";
-
+            // Get giphy for incorrect answer
             $.ajax({
                 url: incorrectGiphyURL,
                 method: "GET"
@@ -189,7 +190,7 @@ $(document).ready(function () {
                     // Wait .1 seconds to show no question answered giphy and play associated sound
                     soundManager.play('DarthVader');
                 }, 100);
-               
+
                 // Show giphy for 3 seconds then clear screen move to next question and display to screen
                 wrongAnswerInt = setTimeout(function () {
                     clearDisplay();
@@ -200,10 +201,6 @@ $(document).ready(function () {
                 }, 3000);
             });
         }
-
-        // currentQuestion++;
-        // clearDisplay();
-        // displayQuestion();
     });
 
 
@@ -214,7 +211,7 @@ $(document).ready(function () {
 
     }
 
-    var count = 15;
+    var count = qnumber;
     function questionTimer() {
         console.log("In questionTimer function");
 
@@ -260,11 +257,11 @@ $(document).ready(function () {
                     method: "GET"
                 }).then(function (responseNoAnswerData) {
                     console.log("response.Data ", responseNoAnswerData)
-                    var noAnswerImageUrl = responseNoAnswerData.data[6].images.original.url;
+                    var noAnswerImageUrl = responseNoAnswerData.data[3].images.original.url;
                     var noAnswercorrectAnswerImg = $("<img>");
                     noAnswercorrectAnswerImg.attr("src", noAnswerImageUrl);
                     noAnswercorrectAnswerImg.attr("alt", "Darth Vader2");
-                    $("#questions").append(noAnswercorrectAnswerImg);       
+                    $("#questions").append(noAnswercorrectAnswerImg);
                 });
             }, 100);
             // Show giphy for 3 seconds then clear screen move to next question and display to screen
@@ -276,7 +273,7 @@ $(document).ready(function () {
             // clearInterval(giphyInt);
         }, 15000);
         // Reset questionTimer
-        count = 15;
+        // count = qnumber;
     }
 
     // Set up sounds to play if answers are correct, incorrect or not answered.
