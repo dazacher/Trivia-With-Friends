@@ -47,7 +47,7 @@ p{
     color: black;
     font-family: 'Press Start 2P', cursive;
     font-weight: bolder;
-    /* text-shadow: -1px 0 hotpink, 0 1px hotpink, 1px 0 hotpink, 0 -1px hotpink; */
+    text-shadow: -1px 0 hotpink, 0 1px hotpink, 1px 0 hotpink, 0 -1px hotpink; 
     font-size: xx-large;
 }
 /* .startBtn{
@@ -63,4 +63,31 @@ p{
 
 #questions h1{
     color:white;
+}
+.high-score-list{
+    background-color: clear;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 200px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-weight: bolder;
+    font-size: xx-large;
+    color: hotpink;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+.high-score-1{
+    background-color: ;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 25px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-weight: bolder;
+    font-size: x-large;
+    color:hotpink;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+.new-game-btn{
+    margin-top: 15px;
 }
