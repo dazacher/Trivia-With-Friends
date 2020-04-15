@@ -5,6 +5,7 @@ $(document).ready(function () {
     var timerCount;
     var endOfGame = false;
     var shuffleArr;
+    var timerInt;
     var giphyInt;
     //Hides question box till start button is pressed.
     $("#questions").hide();
@@ -110,7 +111,9 @@ $(document).ready(function () {
 
         $("#questions").append(`<button class="answers button is-danger is-rounded" data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[3]}</button><br>`)
 
-        // loadAnswers();
+
+        clearTimeout(timerInt);
+        clearTimeout(giphyInt);
         console.log("Message", questions, currentQuestion);
         questionTimer();
 
@@ -127,6 +130,7 @@ $(document).ready(function () {
         console.log("correctAnswer ", correctAnswer);
         // compare current text to
         if (currentText === correctAnswer) {
+            clearDisplay();
             console.log("In the correct if statement");
             soundManager.play('Obi-Wan');
             apiKey = "dwmJvUX39tGRmMpNFZhIxgzD5J6JuM7K";
@@ -137,16 +141,28 @@ $(document).ready(function () {
                 method: "GET"
             }).then(function (responseCorrectData) {
                 console.log("response.Data ", responseCorrectData);
+                correctInt = setTimeout(function () {
                 var correctImageUrl = responseCorrectData.data[0].images.original.url;
                 var correctAnswerImg = $("<img>");
                 correctAnswerImg.attr("src", correctImageUrl);
                 correctAnswerImg.attr("alt", "Obi-Wan");
                 $("#questions").append(correctAnswerImg);
+            }, 100);
+
+                // Show giphy for 3 seconds then clear screen move to next question and display to screen
+                correctAnswerInt = setTimeout(function () {
+                    clearDisplay();
+                    currentQuestion++;
+                    displayQuestion();
+                    // Reset questionTimer
+                    count = 15;
+                }, 3000);
             });
 
         } else if (currentText !== correctAnswer) {
             // } else {
             // Incorrect Data Question Answers Code
+            clearDisplay();
             // soundManager.unmute('DarthVader');
             console.log("In the incorrect part of the if statement");
             soundManager.play('DarthVader');
@@ -158,27 +174,40 @@ $(document).ready(function () {
                 method: "GET"
             }).then(function (responseIncorrectData) {
                 console.log("response.Data ", responseIncorrectData)
-                var incorrectImageUrl = responseIncorrectData.data[0].images.original.url;
-                var incorrectAnswerImg = $("<img>");
-                incorrectAnswerImg.attr("src", incorrectImageUrl);
-                incorrectAnswerImg.attr("alt", "Darth Vader");
-                $("#questions").append(incorrectAnswerImg);
-                //Deduct time if they get the question wrong
-                if (timerCount <= 10) {
-                    timerCount = 0;
-                } else {
-                    timerCount = timerCount - 10;
-                }
+                incorrectAnswerInt = setTimeout(function () {
+                    var incorrectImageUrl = responseIncorrectData.data[0].images.original.url;
+                    var incorrectAnswerImg = $("<img>");
+                    incorrectAnswerImg.attr("src", incorrectImageUrl);
+                    incorrectAnswerImg.attr("alt", "Darth Vader");
+                    $("#questions").append(incorrectAnswerImg);
+                    //Deduct time if they get the question wrong
+                    if (timerCount <= 10) {
+                        timerCount = 0;
+                    } else {
+                        timerCount = timerCount - 10;
+                    }
+                    // Wait .1 seconds to show no question answered giphy and play associated sound
+                    soundManager.play('DarthVader');
+                }, 100);
+               
+                // Show giphy for 3 seconds then clear screen move to next question and display to screen
+                wrongAnswerInt = setTimeout(function () {
+                    clearDisplay();
+                    currentQuestion++;
+                    displayQuestion();
+                    // Reset questionTimer
+                    count = 15;
+                }, 3000);
             });
         }
 
-        currentQuestion++;
-        clearDisplay();
-        displayQuestion();
+        // currentQuestion++;
+        // clearDisplay();
+        // displayQuestion();
     });
 
 
-    function clearDisplay(currentText) {
+    function clearDisplay() {
 
         // Empty the div
         $(".triviaQuestions").empty();
@@ -189,7 +218,7 @@ $(document).ready(function () {
     function questionTimer() {
         console.log("In questionTimer function");
 
-        var timerInt = setTimeout(function () {
+        timerInt = setTimeout(function () {
 
             //   Executes when timer is done
             if (count === 0) {
@@ -235,18 +264,21 @@ $(document).ready(function () {
                     var noAnswercorrectAnswerImg = $("<img>");
                     noAnswercorrectAnswerImg.attr("src", noAnswerImageUrl);
                     noAnswercorrectAnswerImg.attr("alt", "Darth Vader2");
-                    $("#questions").append(noAnswercorrectAnswerImg);
-
-                    // Show giphy for 3 seconds then clear screen move to next question and display to screen
-                    newQuestionInt = setTimeout(function () {
-                        clearDisplay();
-                        currentQuestion++;
-                        displayQuestion();
-                    }, 3000);
+                    $("#questions").append(noAnswercorrectAnswerImg);       
                 });
             }, 100);
+            // Show giphy for 3 seconds then clear screen move to next question and display to screen
+            newQuestionInt = setTimeout(function () {
+                clearDisplay();
+                currentQuestion++;
+                displayQuestion();
+            }, 3000);
+            // clearInterval(giphyInt);
         }, 15000);
+        // Reset questionTimer
+        count = 15;
     }
+
     // Set up sounds to play if answers are correct, incorrect or not answered.
     soundManager.setup({
         // where to find flash audio SWFs, as needed
