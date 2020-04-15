@@ -5,6 +5,8 @@ $(document).ready(function () {
     var timerCount;
     var endOfGame = false;
     var shuffleArr;
+    var timerInt;
+    var giphyInt;
     //Hides question box till start button is pressed.
     $("#questions").hide();
 
@@ -20,13 +22,7 @@ $(document).ready(function () {
         timerCount = 15 * qnumber;
         console.log("qnumber ", qnumber);
         console.log("timerCount ", timerCount);
-        // Trying to figure out how to display the timer in minutes and seconds.
-        // var minutes = Math.floor(timerCount / 60);
-        // var seconds = timerCount - minutes * 60;
-        // var finalTime = str_pad_left(minutes,'0',2)+':'+ str_pad_left(seconds,'0',2);
-        // formatedTime = str_pad_left(minutes, '0', 2) + ':' + str_pad_left(seconds, '0', 2);
 
-        // console.log("formatedTime ", formatedTime);
         // Option Selected for category
         var cvalue = $("#category").children("option:selected").val();
 
@@ -48,16 +44,7 @@ $(document).ready(function () {
                 $("#questions").show();
                 questions = response.results;
                 console.log("questions ", questions)
-                // for (let k = 0; k <= qnumber ; k++){
-                //     shuffleArr = [questions[k].correct_answer, ...questions[k].incorrect_answers].map(a => [Math.random(), a])
-                //     .sort((a, b) => a[0] - b[0])
-                //     .map(a => a[1])
-                // }
-                // shuffleArr = [questions[currentQuestion].correct_answer, ...questions[currentQuestion].incorrect_answers].map(a => [Math.random(), a])
-                //     .sort((a, b) => a[0] - b[0])
-                //     .map(a => a[1])
-                //     console.log("currentQuestion after shuffleArr set ", currentQuestion);
-                // console.log(shuffleArr)
+
                 displayQuestion();
             });
     });
@@ -80,12 +67,26 @@ $(document).ready(function () {
                 if (timerCount < 0) {
                     timerCount = 0;
                     $("#timer").text(timerCount + " seconds");
+
                 };
-                // $("#gameOver").Show("Game Over");
+                // When time is up call gameOver functon
+                clearDisplay();
+                gameOver();
             }
         }, 1000);
     }
 
+    function gameOver() {
+        // When time is up clear screen and display Game over
+        var gameOverDiv = $("<div class='gameOver'>");
+        $("#questions").append(gameOverDiv);
+        var gameOverH5 = $("<h1>");
+        gameOverH5.text("Game Over");
+        gameOverDiv.append(gameOverH5);
+        setTimeout(function () {
+            $(window).attr('location', './game-page.html');
+        }, 5000);
+    }
     //Function to display question.
     function displayQuestion() {
         shuffleArr = [questions[currentQuestion].correct_answer, ...questions[currentQuestion].incorrect_answers].map(a => [Math.random(), a])
@@ -110,8 +111,11 @@ $(document).ready(function () {
 
         $("#questions").append(`<button class="answers button is-danger is-rounded" data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[3]}</button><br>`)
 
-        // loadAnswers();
+
+        clearTimeout(timerInt);
+        clearTimeout(giphyInt);
         console.log("Message", questions, currentQuestion);
+        questionTimer();
 
     };
 
@@ -126,6 +130,7 @@ $(document).ready(function () {
         console.log("correctAnswer ", correctAnswer);
         // compare current text to
         if (currentText === correctAnswer) {
+            clearDisplay();
             console.log("In the correct if statement");
             soundManager.play('Obi-Wan');
             apiKey = "dwmJvUX39tGRmMpNFZhIxgzD5J6JuM7K";
@@ -136,15 +141,28 @@ $(document).ready(function () {
                 method: "GET"
             }).then(function (responseCorrectData) {
                 console.log("response.Data ", responseCorrectData);
-                var correctImageUrl = responseCorrectData.data[0].images.original_mp4.mp4;
+                correctInt = setTimeout(function () {
+                var correctImageUrl = responseCorrectData.data[0].images.original.url;
                 var correctAnswerImg = $("<img>");
                 correctAnswerImg.attr("src", correctImageUrl);
                 correctAnswerImg.attr("alt", "Obi-Wan");
                 $("#questions").append(correctAnswerImg);
+            }, 100);
+
+                // Show giphy for 3 seconds then clear screen move to next question and display to screen
+                correctAnswerInt = setTimeout(function () {
+                    clearDisplay();
+                    currentQuestion++;
+                    displayQuestion();
+                    // Reset questionTimer
+                    count = 15;
+                }, 3000);
             });
 
         } else if (currentText !== correctAnswer) {
+            // } else {
             // Incorrect Data Question Answers Code
+            clearDisplay();
             // soundManager.unmute('DarthVader');
             console.log("In the incorrect part of the if statement");
             soundManager.play('DarthVader');
@@ -156,132 +174,154 @@ $(document).ready(function () {
                 method: "GET"
             }).then(function (responseIncorrectData) {
                 console.log("response.Data ", responseIncorrectData)
-                var incorrectImageUrl = responseIncorrectData.data[0].images.original_mp4.mp4;
-                var incorrectAnswerImg = $("<img>");
-                incorrectAnswerImg.attr("src", incorrectImageUrl);
-                incorrectAnswerImg.attr("alt", "Darth Vader");
-                $("#questions").append(incorrectAnswerImg);
-                //Deduct time if they get the question wrong
-                if (timerCount <= 10) {
-                    timerCount = 0;
-                } else {
-                    timerCount = timerCount - 10;
-                }
+                incorrectAnswerInt = setTimeout(function () {
+                    var incorrectImageUrl = responseIncorrectData.data[0].images.original.url;
+                    var incorrectAnswerImg = $("<img>");
+                    incorrectAnswerImg.attr("src", incorrectImageUrl);
+                    incorrectAnswerImg.attr("alt", "Darth Vader");
+                    $("#questions").append(incorrectAnswerImg);
+                    //Deduct time if they get the question wrong
+                    if (timerCount <= 10) {
+                        timerCount = 0;
+                    } else {
+                        timerCount = timerCount - 10;
+                    }
+                    // Wait .1 seconds to show no question answered giphy and play associated sound
+                    soundManager.play('DarthVader');
+                }, 100);
+               
+                // Show giphy for 3 seconds then clear screen move to next question and display to screen
+                wrongAnswerInt = setTimeout(function () {
+                    clearDisplay();
+                    currentQuestion++;
+                    displayQuestion();
+                    // Reset questionTimer
+                    count = 15;
+                }, 3000);
             });
-        } else {
-            // No Answer Data Question Answers Code
-            // soundManager.unmute('DarthVader');
-            console.log("In the incorrect part of the if statement");
-            soundManager.play('DarthVader');
-            apiKey = "dwmJvUX39tGRmMpNFZhIxgzD5J6JuM7K";
-            noAnswerGiphyURL = "https://api.giphy.com/v1/gifs/search?api_key=" + apiKey + "&q=Darth Vader Dont fail me again&limit=1&offset=0&rating=G&lang=en";
-            $.ajax({
-                url: noAnswerGiphyURL,
-                method: "GET"
-            }).then(function (responseNoAnswerData) {
-                console.log("response.Data ", responseNoAnswerData)
-                var noAnswerImageUrl = responseNoAnswerData.data[0].images.original_mp4.mp4;
-                var noAnswerImageUrl = $("<img>");
-                noAnswercorrectAnswerImg.attr("src", noAnswerImageUrl);
-                noAnswercorrectAnswerImg.attr("alt", "Darth Vader");
-                $("#questions").append(noAnswerImageUrl);
-                //Deduct time if they get the question wrong
-                if (timerCount <= 10) {
-                    timerCount = 0;
-                } else {
-                    timerCount = timerCount - 10;
-                }
-            });
-            // Move on to the next quetion
-            
-            // clearDisplay(currentText);
-            // displayQuestion();
         }
-        currentQuestion++;
-        questionTimer();
+
+        // currentQuestion++;
+        // clearDisplay();
+        // displayQuestion();
     });
 
 
-function clearDisplay(currentText) {
+    function clearDisplay() {
 
-    // Empty the div
-    $(".triviaQuestions").empty();
+        // Empty the div
+        $(".triviaQuestions").empty();
 
-}
+    }
 
-var count = 15;
-function questionTimer() {
-    console.log("In questionTimer function");
+    var count = 15;
+    function questionTimer() {
+        console.log("In questionTimer function");
 
-    var timerInt = setTimeout(function () {
+        timerInt = setTimeout(function () {
 
-        //   Executes when timer is done
-        if (count === 0) {
-            console.log("Count is " + count);
-            console.log("In if statement of questionTimer");
-            timerCount = 0;
-            console.log(" If Statement Game is over!");
-            console.log("TimerCount is " + timerCount);
-            endOfGame = true;
-            clearTimeout(timerInt);
-        } else {
-            console.log("in else of questionTimer");
-            console.log(timerCount);
-            clearDisplay();
-            displayQuestion();
-        }
-        if (endOfGame === true) {
-            console.log("End of Game If statement")
-            clearInterval(timerInterval);
-            alert("Game is over!");
-            // endGameForm();
-        }
-        count--;
-    }, 1500);
-}
-// Set up sounds to play if answers are correct, incorrect or not answered.
-soundManager.setup({
-    // where to find flash audio SWFs, as needed
-    url: './assets/I_have_you_now.mp3',
-    // onload: function() {
-    onready: function () {
-        // soundManager.mute('darthVaderSound');
-        //   Incorrect Answer Sound
-        var darthVaderSound = soundManager.createSound({
-            id: 'DarthVader',
-            url: './assets/I_have_you_now.mp3'
-        });
-        darthVaderSound.play();
-    }, // SM2 is ready to play audio!
-});
+            //   Executes when timer is done
+            if (count === 0) {
+                console.log("Count is " + count);
+                console.log("In if statement of questionTimer");
+                timerCount = 0;
+                console.log(" If Statement Game is over!");
+                console.log("TimerCount is " + timerCount);
+                endOfGame = true;
+                clearTimeout(timerInt);
 
-soundManager.setup({
-    // where to find flash audio SWFs, as needed
-    url: './assets/The_Force_Will_Be_With_You.mp3',
-    // onload: function() {
-    onready: function () {
-        // soundManager.mute('Obi-wan');
-        // Correct answer sound
-        var obiwanSound = soundManager.createSound({
-            id: 'Obi-Wan',
-            url: './assets/The_Force_Will_Be_With_You.mp3'
-        });
-        obiwanSound.play();
-    }, // SM2 is ready to play audio!
-});
+            } else {
+                // If user can not answer question count it wrong, deduct time and play special music and show special giphy. Increment currentQuestion count
+                console.log("in else of questionTimer");
+                console.log(count);
+                console.log("In the incorrect part of the if statement");
 
-soundManager.setup({
-    // where to find flash audio SWFs, as needed
-    url: './assets/Dont_Fail_Me_Again.mp3',
-    // onload: function() {
-    onready: function () {
-        //  soundManager.mute('DarthVader2');
-        //   Ran out of time - incorrect answer sound
-        var darthVader2Sound = soundManager.createSound({
-            id: 'DarthVader2',
-            url: './assets/Dont_Fail_Me_Again.mp3'
-        });
-        darthVader2Sound.play();
-    }, // SM2 is ready to play audio!
-});
+                if (timerCount <= 10) {
+                    timerCount = 0;
+                } else {
+                    timerCount = timerCount - 10;
+                }
+                clearDisplay();
+            }
+            if (endOfGame === true) {
+                console.log("End of Game If statement")
+                clearInterval(timerInterval);
+                gameOver();
+            }
+            count--;
+            // Insert the giphy
+            giphyInt = setTimeout(function () {
+                // Wait .1 seconds to show no question answered giphy and play associated sound
+                soundManager.play('DarthVader2');
+                apiKey = "dwmJvUX39tGRmMpNFZhIxgzD5J6JuM7K";
+                noAnswerGiphyURL = "https://api.giphy.com/v1/gifs/search?api_key=" + apiKey + "&q=Darth Vader Dont fail me again&limit=25&offset=0&rating=G&lang=en";
+                $.ajax({
+                    url: noAnswerGiphyURL,
+                    method: "GET"
+                }).then(function (responseNoAnswerData) {
+                    console.log("response.Data ", responseNoAnswerData)
+                    var noAnswerImageUrl = responseNoAnswerData.data[6].images.original.url;
+                    var noAnswercorrectAnswerImg = $("<img>");
+                    noAnswercorrectAnswerImg.attr("src", noAnswerImageUrl);
+                    noAnswercorrectAnswerImg.attr("alt", "Darth Vader2");
+                    $("#questions").append(noAnswercorrectAnswerImg);       
+                });
+            }, 100);
+            // Show giphy for 3 seconds then clear screen move to next question and display to screen
+            newQuestionInt = setTimeout(function () {
+                clearDisplay();
+                currentQuestion++;
+                displayQuestion();
+            }, 3000);
+            // clearInterval(giphyInt);
+        }, 15000);
+        // Reset questionTimer
+        count = 15;
+    }
+
+    // Set up sounds to play if answers are correct, incorrect or not answered.
+    soundManager.setup({
+        // where to find flash audio SWFs, as needed
+        url: './assets/I_have_you_now.mp3',
+        // onload: function() {
+        onready: function () {
+            // soundManager.mute('darthVaderSound');
+            //   Incorrect Answer Sound
+            var darthVaderSound = soundManager.createSound({
+                id: 'DarthVader',
+                url: './assets/I_have_you_now.mp3'
+            });
+            darthVaderSound.play();
+        }, // SM2 is ready to play audio!
+    });
+
+    soundManager.setup({
+        // where to find flash audio SWFs, as needed
+        url: './assets/The_Force_Will_Be_With_You.mp3',
+        // onload: function() {
+        onready: function () {
+            // soundManager.mute('Obi-wan');
+            // Correct answer sound
+            var obiwanSound = soundManager.createSound({
+                id: 'Obi-Wan',
+                url: './assets/The_Force_Will_Be_With_You.mp3'
+            });
+            obiwanSound.play();
+        }, // SM2 is ready to play audio!
+    });
+
+    soundManager.setup({
+        // where to find flash audio SWFs, as needed
+        url: './assets/Dont_Fail_Me_Again.mp3',
+        // onload: function() {
+        onready: function () {
+            //  soundManager.mute('DarthVader2');
+            //   Ran out of time - incorrect answer sound
+            var darthVader2Sound = soundManager.createSound({
+                id: 'DarthVader2',
+                url: './assets/Dont_Fail_Me_Again.mp3'
+            });
+            darthVader2Sound.play();
+        }, // SM2 is ready to play audio!
+    });
 });
