@@ -18,7 +18,6 @@ $(document).ready(function () {
         // Call the set time function to display it on the page
         setTime();
 
-
         // Option selected for number of questions
         qnumber = $("#numberOfQuestions").children("option:selected").val();
         // Set end of game counter for question timer
@@ -38,7 +37,6 @@ $(document).ready(function () {
         // Api to get the question data from the Open Trivia API
         var apiURL = `https://opentdb.com/api.php?amount=${qnumber}&category=${cvalue}&difficulty=${difficulty}&type=multiple`;
 
-
         $.ajax({
             url: apiURL,
             method: "GET"
@@ -53,7 +51,6 @@ $(document).ready(function () {
                 displayQuestion();
             });
     });
-
 
     // Set the time on the screen and check for end of game
     function setTime() {
@@ -77,17 +74,20 @@ $(document).ready(function () {
                 } else {
                     // Otherwise just stop the game clock, and record the time as it is for high score in gamepver function.
                     clearInterval(timerInterval);
+                    clearDisplay();
                 };
                 // When time is up call gameOver functon
+                console.log("settime clear display")
                 clearDisplay();
-                // gameOver();
+                console.log("settimer function gameover call")
+                clearInterval(timerInt);
+                gameOver();
             }
         }, 1000);
     }
 
     function gameOver() {
         console.log("Game over function");
-
         // When time is up clear screen and display Game over and high score
         var gameOverDiv = $("<div class='gameOver'>");
         $(".triviaQuestions").append(gameOverDiv);
@@ -146,7 +146,7 @@ $(document).ready(function () {
             // go to highscores page
             setTimeout(function () {
                 $(window).attr('location', './game-page.html');
-            }, 5000);
+            }, 500);
         });
     };
 
@@ -168,9 +168,15 @@ $(document).ready(function () {
         // var quizTimer = $("#timer");
         $("#timer").css("visibility", "visible");
         // Show question on display
-        $("#questions").append(`<h1>${questions[currentQuestion].question}</h1><br>`)
+        answer1 = questions[currentQuestion].question;
+        // $("#questions").append(`<h1>${questions[currentQuestion].question}</h1><br>`)
+        $("#questions").append("<h1>" + answer1 + "</h1><br>");
 
         $("#questions").append(`<button class="answers button is-danger is-rounded" style:text-align:center; data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[0]}</button><br>`)
+        correctAnswerResponse = questions[currentQuestion].correct_answer;
+        console.log("questions[currentQuestion].correct_answer", questions[currentQuestion].correct_answer);
+        console.log("correctAnswerResponse ", correctAnswerResponse);
+        // $("#questions").append("<button class='answers button is-danger is-rounded' style:text-align:center; data-answer=" + correctAnswerResponse + ">"$(shuffleArr[0])"</button><br>");
 
         $("#questions").append(`<button class="answers button is-danger is-rounded" data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[1]}</button><br>`)
 
@@ -209,6 +215,7 @@ $(document).ready(function () {
                 console.log("response.Data ", responseCorrectData);
                 correctInt = setTimeout(function () {
                     var correctImageUrl = responseCorrectData.data.images.original.url;
+                    // Build the image layout to display on the page
                     var correctAnswerImg = $("<img>");
                     correctAnswerImg.attr("src", correctImageUrl);
                     correctAnswerImg.attr("alt", "Yoda");
@@ -236,6 +243,7 @@ $(document).ready(function () {
                 console.log("response.Data ", responseIncorrectData);
                 incorrectInt = setTimeout(function () {
                     var incorrectImageUrl = responseIncorrectData.data.images.original.url;
+                    // Build the image layout to display on the page
                     var incorrectAnswerImg = $("<img>");
                     incorrectAnswerImg.attr("src", incorrectImageUrl);
                     incorrectAnswerImg.attr("alt", "Darth Vader");
@@ -253,7 +261,6 @@ $(document).ready(function () {
         };
     });
 
-
     function clearDisplay() {
 
         // Empty the div
@@ -261,11 +268,8 @@ $(document).ready(function () {
 
     }
 
-
     function questionTimer() {
-        // if (questionCount >= questions.length) {
-        //     return false;
-        // }
+
         // Decrement how many questions are remaining for question timer to keep track of end of game.
         questionCount--;
         console.log("In questionTimer function");
@@ -273,7 +277,7 @@ $(document).ready(function () {
         timerInt = setTimeout(function () {
             console.log("Question count in timeout function ", questionCount);
             //   If there are no more questions left, game if over
-            if (questionCount === 0) {
+            if (questionCount < 0) {
                 console.log("If Count is " + questionCount);
                 console.log("In if statement of questionTimer");
                 console.log(" If Statement Game is over!");
@@ -281,20 +285,30 @@ $(document).ready(function () {
                 endOfGame = true;
                 clearTimeout(timerInt);
 
+            } else if (setTime < 10) {
+
             } else {
                 // If user can not answer question count it wrong, deduct time and play special music and show special giphy. Increment currentQuestion count
                 console.log("in else of questionTimer");
                 console.log("Else Count is " + questionCount);
-                console.log("In the incorrect part of the if statement");
+                console.log("In the can't answer part of the if statement clear display");
                 clearDisplay();
                 // Insert the giphy
                 giphyInt = setTimeout(function () {
                     if (timerCount <= 10) {
                         timerCount = 0;
                         endOfGame = true;
+                        console.log("end of game ", endOfGame);
                     } else {
                         console.log("giphy else part of if statement timerCount", timerCount)
                         timerCount = timerCount - 10;
+                    }
+                    if (endOfGame === true) {
+                        console.log("end of game ", endOfGame);
+                        console.log("giphy else part of if statement gameover call clear display");
+                        clearDisplay();
+                        gameOver();
+                        return false;
                     }
                     // Wait .1 seconds to show no question answered giphy and play associated sound
                     soundManager.play('DarthVader2');
@@ -314,14 +328,17 @@ $(document).ready(function () {
                 }, 100);
                 // Show giphy for 3 seconds then clear screen move to next question and display to screen
                 newQuestionInt = setTimeout(function () {
+                    console.log("no answer giphy clear display timeout")
                     clearDisplay();
                     currentQuestion++;
                     displayQuestion();
                 }, 3000);
             }
+
             if (endOfGame === true) {
-                console.log("End of Game If statement")
+                console.log("End of Game If statement in 15 second timer")
                 clearInterval(timerInterval);
+                clearInterval(giphyInt);
                 gameOver();
             }
         }, 15000);
