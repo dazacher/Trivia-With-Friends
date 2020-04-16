@@ -146,7 +146,7 @@ $(document).ready(function () {
             // go to highscores page
             setTimeout(function () {
                 $(window).attr('location', './game-page.html');
-            }, 5000);
+            }, 500);
         });
     };
 
@@ -168,9 +168,15 @@ $(document).ready(function () {
         // var quizTimer = $("#timer");
         $("#timer").css("visibility", "visible");
         // Show question on display
-        $("#questions").append(`<h1>${questions[currentQuestion].question}</h1><br>`)
+        answer1 = questions[currentQuestion].question;
+        // $("#questions").append(`<h1>${questions[currentQuestion].question}</h1><br>`)
+        $("#questions").append("<h1>" + answer1 + "</h1><br>");
 
         $("#questions").append(`<button class="answers button is-danger is-rounded" style:text-align:center; data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[0]}</button><br>`)
+        correctAnswerResponse = questions[currentQuestion].correct_answer;
+        console.log("questions[currentQuestion].correct_answer", questions[currentQuestion].correct_answer);
+        console.log ("correctAnswerResponse ", correctAnswerResponse);
+        // $("#questions").append("<button class='answers button is-danger is-rounded' style:text-align:center; data-answer=" + correctAnswerResponse + ">"$(shuffleArr[0])"</button><br>");
 
         $("#questions").append(`<button class="answers button is-danger is-rounded" data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[1]}</button><br>`)
 
@@ -281,7 +287,8 @@ $(document).ready(function () {
                 endOfGame = true;
                 clearTimeout(timerInt);
 
-            } else {
+            } else
+        }else {
                 // If user can not answer question count it wrong, deduct time and play special music and show special giphy. Increment currentQuestion count
                 console.log("in else of questionTimer");
                 console.log("Else Count is " + questionCount);
