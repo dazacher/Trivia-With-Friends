@@ -101,7 +101,7 @@ $(document).ready(function () {
         $("#questions").append(`<h1>${questions[currentQuestion].question}</h1><br>`)
 
         $("#questions").append(`<button class="answers button is-danger is-rounded" style:text-align:center; data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[0]}</button><br>`)
-
+    
 
         $("#questions").append(`<button class="answers button is-danger is-rounded" data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[1]}</button><br>`)
 

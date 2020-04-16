@@ -34,6 +34,14 @@ p{
 #title{
     text-align: center;
 }
+.field-1,
+.field-2,
+.field-3,
+#startBtn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 #timer{
     visibility: hidden;
@@ -47,7 +55,7 @@ p{
     color: black;
     font-family: 'Press Start 2P', cursive;
     font-weight: bolder;
-    text-shadow: -1px 0 hotpink, 0 1px hotpink, 1px 0 hotpink, 0 -1px hotpink; 
+    text-shadow: -3px 0 hotpink, 0 3px hotpink, 3px 0 hotpink, 0 -3px hotpink; 
     font-size: xx-large;
 }
 /* .startBtn{
