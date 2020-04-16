@@ -7,6 +7,9 @@ $(document).ready(function () {
     var shuffleArr;
     var timerInt;
     var giphyInt;
+    var qnumber;
+    var questionCount;
+    var timerInterval;
     //Hides question box till start button is pressed.
     $("#questions").hide();
 
@@ -17,7 +20,9 @@ $(document).ready(function () {
 
 
         // Option selected for number of questions
-        var qnumber = $("#numberOfQuestions").children("option:selected").val();
+        qnumber = $("#numberOfQuestions").children("option:selected").val();
+        // Set end of game counter for question timer
+        questionCount = qnumber;
         // Set variable for timer based in number of question input by user. Each question given 15 seconds to answer
         timerCount = 15 * qnumber;
         console.log("qnumber ", qnumber);
@@ -62,61 +67,122 @@ $(document).ready(function () {
             $("#timer").text(timerCount + " seconds");
 
             //   Executes when timer is done
-            if (timerCount < 1 || endOfGame === true) {
+            if (timerCount < 1 || currentQuestion >= qnumber) {
                 clearInterval(timerInterval);
+                // If the game timer is less than zero set it to zero - no negative time.
                 if (timerCount < 0) {
                     timerCount = 0;
                     $("#timer").text(timerCount + " seconds");
 
+                } else {
+                    // Otherwise just stop the game clock, and record the time as it is for high score in gamepver function.
+                    clearInterval(timerInterval);
                 };
                 // When time is up call gameOver functon
                 clearDisplay();
-                gameOver();
+                // gameOver();
             }
         }, 1000);
     }
 
     function gameOver() {
-        // When time is up clear screen and display Game over
+        console.log("Game over function");
+
+        // When time is up clear screen and display Game over and high score
         var gameOverDiv = $("<div class='gameOver'>");
-        $("#questions").append(gameOverDiv);
-        var gameOverH5 = $("<h1>");
-        gameOverH5.text("Game Over");
-        gameOverDiv.append(gameOverH5);
-        setTimeout(function () {
-            $(window).attr('location', './game-page.html');
-        }, 5000);
-    }
+        $(".triviaQuestions").append(gameOverDiv);
+        var gameOverH1 = $("<h1>");
+        gameOverH1.text("Game Over");
+        gameOverDiv.append(gameOverH1);
+
+        var highScoreMsgH1 = $("<h1>");
+        highScoreMsgH1.text("High score: " + timerCount);
+        gameOverDiv.append(highScoreMsgH1);
+
+        // have user enter name and push submit button to save data to localstorage
+        // H1 for Label to enter the name
+        var nameH1 = $("<h1>");
+        nameH1.text("Enter name Here: ");
+        gameOverDiv.append(nameH1);
+        // Input box to enter the name
+        var inputBoxName = $("<input>");
+        inputBoxName.attr("id", "userInputName")
+        gameOverDiv.append(inputBoxName);
+        //Button to submit the name and high score to local storage
+        var submitButton = $("<button>");
+        submitButton.text("Submit");
+        submitButton.attr("class", "submitBtn");
+        gameOverDiv.append(submitButton);
+
+        // Submit button click loads the information to local storage
+        $(".submitBtn").on("click", function () {
+            console.log("submit button clicked")
+            localStorage.getItem("userHighScores");
+            let userHighScores = JSON.parse(localStorage.getItem("userHighScores"));
+            // if no highscores exist in localstorage create an array to start storing them in
+            if (!userHighScores) {
+                userHighScores = [];
+            };
+
+            inputboxName = $("#userInputName").val();
+            console.log("userHighScores ", userHighScores);
+            console.log("inputBoxName.text ", inputboxName);
+            console.log("SubmitButton pushed");
+            var userObj = {
+                highScore: timerCount,
+                name: inputboxName
+            };
+            // Push the user oject with name and high score into the array 
+            userHighScores.push(userObj);
+            // Sort the high scores from highest to lowest
+            let sortedHighScores = userHighScores.sort(function (a, b) {
+                return (b.highScore - a.highScore);
+            });
+            // Put the data into local storage
+            localStorage.setItem("userHighScores", JSON.stringify(sortedHighScores));
+            console.log(sortedHighScores);
+            // Clear the page for reload
+            $("#questions").empty();
+            // go to highscores page
+            setTimeout(function () {
+                $(window).attr('location', './game-page.html');
+            }, 5000);
+        });
+    };
+
     //Function to display question.
     function displayQuestion() {
+        console.log("currentQuestion ", currentQuestion);
+        if (currentQuestion >= questions.length) {
+            return false;
+        } else if (timerCount === 0) {
+            return false;
+        }
+        // Shuffle the answers so they are random
         shuffleArr = [questions[currentQuestion].correct_answer, ...questions[currentQuestion].incorrect_answers].map(a => [Math.random(), a])
             .sort((a, b) => a[0] - b[0])
             .map(a => a[1])
         console.log("currentQuestion after shuffleArr set ", currentQuestion);
         console.log(shuffleArr)
         // Set up game timer and make it visible
-        var quizTimer = $("#timer");
+        // var quizTimer = $("#timer");
         $("#timer").css("visibility", "visible");
         // Show question on display
         $("#questions").append(`<h1>${questions[currentQuestion].question}</h1><br>`)
 
         $("#questions").append(`<button class="answers button is-danger is-rounded" style:text-align:center; data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[0]}</button><br>`)
-    
 
         $("#questions").append(`<button class="answers button is-danger is-rounded" data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[1]}</button><br>`)
 
-
         $("#questions").append(`<button class="answers button is-danger is-rounded" data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[2]}</button><br>`)
-
 
         $("#questions").append(`<button class="answers button is-danger is-rounded" data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[3]}</button><br>`)
 
-
+        console.log("Message", questions, currentQuestion);
+        // Reset timers
         clearTimeout(timerInt);
         clearTimeout(giphyInt);
-        console.log("Message", questions, currentQuestion);
         questionTimer();
-
     };
 
     // Verify the answers clicked on as to correct or incorrect then clear the display and moveon to next question.
@@ -128,82 +194,63 @@ $(document).ready(function () {
         // grab correct answer
         var correctAnswer = questions[currentQuestion].correct_answer;
         console.log("correctAnswer ", correctAnswer);
-        // compare current text to
+        // compare current text to correct answer
         if (currentText === correctAnswer) {
             clearDisplay();
             console.log("In the correct if statement");
             soundManager.play('Obi-Wan');
             apiKey = "dwmJvUX39tGRmMpNFZhIxgzD5J6JuM7K";
-            correctGiphyURL = "https://api.giphy.com/v1/gifs/search?api_key=" + apiKey + "&q=The force will be with you&limit=1&rating=G&lang=en";
-
+            correctGiphyURL = "https://api.giphy.com/v1/gifs/TwmEnGgxdUT4Y?api_key=" + apiKey;
+            // Get giphy for correct answer
             $.ajax({
                 url: correctGiphyURL,
                 method: "GET"
             }).then(function (responseCorrectData) {
                 console.log("response.Data ", responseCorrectData);
                 correctInt = setTimeout(function () {
-                var correctImageUrl = responseCorrectData.data[0].images.original.url;
-                var correctAnswerImg = $("<img>");
-                correctAnswerImg.attr("src", correctImageUrl);
-                correctAnswerImg.attr("alt", "Obi-Wan");
-                $("#questions").append(correctAnswerImg);
-            }, 100);
+                    var correctImageUrl = responseCorrectData.data.images.original.url;
+                    var correctAnswerImg = $("<img>");
+                    correctAnswerImg.attr("src", correctImageUrl);
+                    correctAnswerImg.attr("alt", "Yoda");
+                    $("#questions").append(correctAnswerImg);
+                }, 100);
 
                 // Show giphy for 3 seconds then clear screen move to next question and display to screen
                 correctAnswerInt = setTimeout(function () {
                     clearDisplay();
                     currentQuestion++;
                     displayQuestion();
-                    // Reset questionTimer
-                    count = 15;
                 }, 3000);
             });
-
-        } else if (currentText !== correctAnswer) {
-            // } else {
-            // Incorrect Data Question Answers Code
+        } else {
             clearDisplay();
-            // soundManager.unmute('DarthVader');
-            console.log("In the incorrect part of the if statement");
+            console.log("In the incorrect else statement");
             soundManager.play('DarthVader');
             apiKey = "dwmJvUX39tGRmMpNFZhIxgzD5J6JuM7K";
-            incorrectGiphyURL = "https://api.giphy.com/v1/gifs/search?api_key=" + apiKey + "&q=Darth vader I have you know&limit=1&offset=0&rating=G&lang=en";
-
+            incorrectGiphyURL = "https://api.giphy.com/v1/gifs/ZX6NHzA9Fcddm?api_key=" + apiKey;
+            // Get giphy for incorrect answer
             $.ajax({
                 url: incorrectGiphyURL,
                 method: "GET"
             }).then(function (responseIncorrectData) {
-                console.log("response.Data ", responseIncorrectData)
-                incorrectAnswerInt = setTimeout(function () {
-                    var incorrectImageUrl = responseIncorrectData.data[0].images.original.url;
+                console.log("response.Data ", responseIncorrectData);
+                incorrectInt = setTimeout(function () {
+                    var incorrectImageUrl = responseIncorrectData.data.images.original.url;
                     var incorrectAnswerImg = $("<img>");
                     incorrectAnswerImg.attr("src", incorrectImageUrl);
                     incorrectAnswerImg.attr("alt", "Darth Vader");
                     $("#questions").append(incorrectAnswerImg);
-                    //Deduct time if they get the question wrong
-                    if (timerCount <= 10) {
-                        timerCount = 0;
-                    } else {
-                        timerCount = timerCount - 10;
-                    }
-                    // Wait .1 seconds to show no question answered giphy and play associated sound
-                    soundManager.play('DarthVader');
                 }, 100);
-               
+                // Deduct 10 seconds from the game time as a penalty
+                timerCount = timerCount - 10;
                 // Show giphy for 3 seconds then clear screen move to next question and display to screen
-                wrongAnswerInt = setTimeout(function () {
+                incorrectAnswerInt = setTimeout(function () {
                     clearDisplay();
                     currentQuestion++;
                     displayQuestion();
-                    // Reset questionTimer
-                    count = 15;
                 }, 3000);
             });
-        }
-
-        // currentQuestion++;
-        // clearDisplay();
-        // displayQuestion();
+        };
     });
 
 
@@ -214,17 +261,21 @@ $(document).ready(function () {
 
     }
 
-    var count = 15;
+
     function questionTimer() {
+        // if (questionCount >= questions.length) {
+        //     return false;
+        // }
+        // Decrement how many questions are remaining for question timer to keep track of end of game.
+        questionCount--;
         console.log("In questionTimer function");
-
+        console.log("Question count ", questionCount, qnumber);
         timerInt = setTimeout(function () {
-
-            //   Executes when timer is done
-            if (count === 0) {
-                console.log("Count is " + count);
+            console.log("Question count in timeout function ", questionCount);
+            //   If there are no more questions left, game if over
+            if (questionCount === 0) {
+                console.log("If Count is " + questionCount);
                 console.log("In if statement of questionTimer");
-                timerCount = 0;
                 console.log(" If Statement Game is over!");
                 console.log("TimerCount is " + timerCount);
                 endOfGame = true;
@@ -233,59 +284,56 @@ $(document).ready(function () {
             } else {
                 // If user can not answer question count it wrong, deduct time and play special music and show special giphy. Increment currentQuestion count
                 console.log("in else of questionTimer");
-                console.log(count);
+                console.log("Else Count is " + questionCount);
                 console.log("In the incorrect part of the if statement");
-
-                if (timerCount <= 10) {
-                    timerCount = 0;
-                } else {
-                    timerCount = timerCount - 10;
-                }
                 clearDisplay();
+                // Insert the giphy
+                giphyInt = setTimeout(function () {
+                    if (timerCount <= 10) {
+                        timerCount = 0;
+                        endOfGame = true;
+                    } else {
+                        console.log("giphy else part of if statement timerCount", timerCount)
+                        timerCount = timerCount - 10;
+                    }
+                    // Wait .1 seconds to show no question answered giphy and play associated sound
+                    soundManager.play('DarthVader2');
+                    apiKey = "dwmJvUX39tGRmMpNFZhIxgzD5J6JuM7K";
+                    noAnswerGiphyURL = "https://api.giphy.com/v1/gifs/1FZqAOn4hzGO4?api_key=" + apiKey;
+                    $.ajax({
+                        url: noAnswerGiphyURL,
+                        method: "GET"
+                    }).then(function (responseNoAnswerData) {
+                        console.log("response.Data ", responseNoAnswerData)
+                        var noAnswerImageUrl = responseNoAnswerData.data.images.original.url;
+                        var noAnswercorrectAnswerImg = $("<img>");
+                        noAnswercorrectAnswerImg.attr("src", noAnswerImageUrl);
+                        noAnswercorrectAnswerImg.attr("alt", "Darth Vader2");
+                        $("#questions").append(noAnswercorrectAnswerImg);
+                    });
+                }, 100);
+                // Show giphy for 3 seconds then clear screen move to next question and display to screen
+                newQuestionInt = setTimeout(function () {
+                    clearDisplay();
+                    currentQuestion++;
+                    displayQuestion();
+                }, 3000);
             }
             if (endOfGame === true) {
                 console.log("End of Game If statement")
                 clearInterval(timerInterval);
                 gameOver();
             }
-            count--;
-            // Insert the giphy
-            giphyInt = setTimeout(function () {
-                // Wait .1 seconds to show no question answered giphy and play associated sound
-                soundManager.play('DarthVader2');
-                apiKey = "dwmJvUX39tGRmMpNFZhIxgzD5J6JuM7K";
-                noAnswerGiphyURL = "https://api.giphy.com/v1/gifs/search?api_key=" + apiKey + "&q=Darth Vader Dont fail me again&limit=25&offset=0&rating=G&lang=en";
-                $.ajax({
-                    url: noAnswerGiphyURL,
-                    method: "GET"
-                }).then(function (responseNoAnswerData) {
-                    console.log("response.Data ", responseNoAnswerData)
-                    var noAnswerImageUrl = responseNoAnswerData.data[6].images.original.url;
-                    var noAnswercorrectAnswerImg = $("<img>");
-                    noAnswercorrectAnswerImg.attr("src", noAnswerImageUrl);
-                    noAnswercorrectAnswerImg.attr("alt", "Darth Vader2");
-                    $("#questions").append(noAnswercorrectAnswerImg);       
-                });
-            }, 100);
-            // Show giphy for 3 seconds then clear screen move to next question and display to screen
-            newQuestionInt = setTimeout(function () {
-                clearDisplay();
-                currentQuestion++;
-                displayQuestion();
-            }, 3000);
-            // clearInterval(giphyInt);
         }, 15000);
-        // Reset questionTimer
-        count = 15;
     }
 
     // Set up sounds to play if answers are correct, incorrect or not answered.
     soundManager.setup({
         // where to find flash audio SWFs, as needed
         url: './assets/I_have_you_now.mp3',
-        // onload: function() {
+
         onready: function () {
-            // soundManager.mute('darthVaderSound');
+
             //   Incorrect Answer Sound
             var darthVaderSound = soundManager.createSound({
                 id: 'DarthVader',
@@ -298,9 +346,9 @@ $(document).ready(function () {
     soundManager.setup({
         // where to find flash audio SWFs, as needed
         url: './assets/The_Force_Will_Be_With_You.mp3',
-        // onload: function() {
+
         onready: function () {
-            // soundManager.mute('Obi-wan');
+
             // Correct answer sound
             var obiwanSound = soundManager.createSound({
                 id: 'Obi-Wan',
@@ -313,9 +361,9 @@ $(document).ready(function () {
     soundManager.setup({
         // where to find flash audio SWFs, as needed
         url: './assets/Dont_Fail_Me_Again.mp3',
-        // onload: function() {
+
         onready: function () {
-            //  soundManager.mute('DarthVader2');
+
             //   Ran out of time - incorrect answer sound
             var darthVader2Sound = soundManager.createSound({
                 id: 'DarthVader2',
