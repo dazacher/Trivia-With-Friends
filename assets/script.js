@@ -1,6 +1,6 @@
 var questions = [];
 var currentQuestion = 0;
-
+// McDonald&#039;s
 $(document).ready(function () {
     var timerCount;
     var endOfGame = false;
@@ -49,6 +49,10 @@ $(document).ready(function () {
                 console.log("questions ", questions)
 
                 displayQuestion();
+                // var string = "<br/Hi>".replace(/&#39;/g, '\'');
+                // var string = "${questions[currentQuestion].correct_answer}".replace(/&#39;/g, '\'');
+                // console.log("string ", string);
+
             });
     });
 
@@ -74,7 +78,7 @@ $(document).ready(function () {
                 } else {
                     // Otherwise just stop the game clock, and record the time as it is for high score in gamepver function.
                     clearInterval(timerInterval);
-                    clearDisplay();
+                    // clearDisplay();
                 };
                 // When time is up call gameOver functon
                 console.log("settime clear display")
@@ -168,15 +172,12 @@ $(document).ready(function () {
         // var quizTimer = $("#timer");
         $("#timer").css("visibility", "visible");
         // Show question on display
-        answer1 = questions[currentQuestion].question;
-        // $("#questions").append(`<h1>${questions[currentQuestion].question}</h1><br>`)
-        $("#questions").append("<h1>" + answer1 + "</h1><br>");
+
+        $("#questions").append(`<h1>${questions[currentQuestion].question}</h1><br>`)
+
 
         $("#questions").append(`<button class="answers button is-danger is-rounded" style:text-align:center; data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[0]}</button><br>`)
         correctAnswerResponse = questions[currentQuestion].correct_answer;
-        console.log("questions[currentQuestion].correct_answer", questions[currentQuestion].correct_answer);
-        console.log("correctAnswerResponse ", correctAnswerResponse);
-        // $("#questions").append("<button class='answers button is-danger is-rounded' style:text-align:center; data-answer=" + correctAnswerResponse + ">"$(shuffleArr[0])"</button><br>");
 
         $("#questions").append(`<button class="answers button is-danger is-rounded" data-answer="${questions[currentQuestion].correct_answer}">${shuffleArr[1]}</button><br>`)
 
@@ -277,11 +278,12 @@ $(document).ready(function () {
         timerInt = setTimeout(function () {
             console.log("Question count in timeout function ", questionCount);
             //   If there are no more questions left, game if over
-            if (questionCount < 0) {
+            if (questionCount = 0) {
                 console.log("If Count is " + questionCount);
                 console.log("In if statement of questionTimer");
                 console.log(" If Statement Game is over!");
                 console.log("TimerCount is " + timerCount);
+                console.log("questionCount ", questionCount);
                 endOfGame = true;
                 clearTimeout(timerInt);
 
