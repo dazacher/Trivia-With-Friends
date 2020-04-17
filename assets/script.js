@@ -152,7 +152,7 @@ $(document).ready(function () {
                 $(window).attr('location', './game-page.html');
             }, 500);
         });
-    };
+      };
 
     //Function to display question.
     function displayQuestion() {
