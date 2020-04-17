@@ -335,6 +335,9 @@ $(document).ready(function () {
                 // Show giphy for 3 seconds then clear screen move to next question and display to screen
                 newQuestionInt = setTimeout(function () {
                     console.log("no answer giphy clear display timeout")
+                    if (endOfGame === true) {
+                        return false;
+                    }
                     clearDisplay();
                     currentQuestion++;
                     displayQuestion();
