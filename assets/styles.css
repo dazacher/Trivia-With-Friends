@@ -219,3 +219,9 @@ p{
     color:greenyellow;
     text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
 }
+.game-over{
+    color: black !important;
+    font-family: 'Press Start 2P', cursive !important;
+    font-weight: bolder;
+    text-shadow: -3px 0 hotpink, 0 3px hotpink, 3px 0 hotpink, 0 -3px hotpink !important; 
+};
