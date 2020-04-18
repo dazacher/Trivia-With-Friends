@@ -98,10 +98,11 @@ $(document).ready(function () {
         $(".triviaQuestions").append(gameOverDiv);
         var gameOverH1 = $("<h1>");
         gameOverH1.text("Game Over");
+        gameOverH1.attr("class","game-over");
         gameOverDiv.append(gameOverH1);
 
         var highScoreMsgH1 = $("<h1>");
-        highScoreMsgH1.text("High score: " + timerCount);
+        highScoreMsgH1.text("Your score: " + timerCount);
         gameOverDiv.append(highScoreMsgH1);
 
         // have user enter name and push submit button to save data to localstorage
