@@ -9,3 +9,5 @@ When a wrong answer is selected a giphy of Darth Vader pops up and says "Don't f
 If the user selects the correct answer a giphy of Yoda pops up and says "The force will be with you, always".
 Once the user has cycled through the questions, "Game Over" will pop up on the screen. The score you get is the amount of time that is left in the game.
 The user will be prompted to input their initials. Once the user enters their initials they will be brought to the highscores page which lists the top 10 scores on the local device being used.
+
+https://dazacher.github.io/Trivia-With-Friends/
