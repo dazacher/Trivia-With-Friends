@@ -61,4 +61,4 @@ The Author has chosen not to show an email.
 
 ### Link
 
-https://github.com/dazacher/Trivia-With-Friends
+ https://dazacher.github.io/Trivia-With-Friends/
